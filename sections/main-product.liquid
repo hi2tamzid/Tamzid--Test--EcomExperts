@@ -670,6 +670,23 @@
   </div>
 </section>
 
+<script>
+  // function to clear selected variants
+function clearSelectedVariants() {
+  // select all variant option of size 
+  let variant_selector = document.querySelectorAll(".js.product-form__input:nth-child(2) input");
+  
+  // loop through each select and set the selected value to the first option (which is usually the default)
+  variant_selector.forEach((item) => {
+    item.removeAttribute("checked");
+  });
+  // Marking first option as che
+  variant_selector[0].setAttribute("checked", "");
+} 
+window.addEventListener("load", clearSelectedVariants);
+
+</script>
+
 {% schema %}
 {
   "name": "t:sections.main-product.name",
