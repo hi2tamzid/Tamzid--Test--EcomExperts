@@ -1972,8 +1972,20 @@
         "variant_picker": {
           "name": "Variant picker",
           "settings": {
-            "picker_type": {
-              "label": "Type",
+            "picker_type_1": {
+              "label": "Option 1",
+              "options__1": {
+                "label": "Dropdown"
+              },
+              "options__2": {
+                "label": "Pills"
+              },
+              "options__3": {
+                "label": "Swatches"
+              }
+            },
+            "picker_type_2": {
+              "label": "Option 2",
               "options__1": {
                 "label": "Dropdown"
               },

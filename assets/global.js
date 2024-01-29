@@ -694,6 +694,8 @@ class SliderComponent extends HTMLElement {
 
   onButtonClick(event) {
     event.preventDefault();
+    
+
     const step = event.currentTarget.dataset.step || 1;
     this.slideScrollPosition =
       event.currentTarget.name === 'next'
@@ -952,6 +954,13 @@ class VariantSelects extends HTMLElement {
   }
 
   onVariantChange() {
+    const all_product_media = document.querySelectorAll(".product__media-item");
+    all_product_media.forEach((item) => {
+      if(!item.classList.contains("product__media-item--variant")){
+        item.classList.add("product__media-item--variant");
+      }
+    });
+
     this.updateOptions();
     this.updateMasterId();
     this.toggleAddButton(true, '', false);

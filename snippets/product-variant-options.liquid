@@ -1,18 +1,18 @@
 {% comment %} 
-    Renders product variant options
-   
-    Accepts: 
-    - product: {Object} product object. 
-    - option: {Object} current product_option object. 
-    - block: {Object} block object.
-   
-   
-    Usage:
-    {% render 'product-variant-options', 
-    product: product, 
-    option: option, 
-    block: block
-    %} 
+      Renders product variant options
+     
+      Accepts: 
+      - product: {Object} product object. 
+      - option: {Object} current product_option object. 
+      - block: {Object} block object.
+     
+     
+      Usage:
+      {% render 'product-variant-options', 
+      product: product, 
+      option: option, 
+      block: block
+      %} 
 {% endcomment %}
 {%- liquid
   assign variants_available_arr = product.variants | map: 'available'
@@ -44,7 +44,8 @@
       endcase
     endfor
   -%}
-  {%- if block.settings.picker_type == 'swatches' -%}
+  {% assign option_name = option.name | downcase  %}
+  {%- if option_name == "color" and  block.settings.picker_type_1 == 'swatches' -%}
 
     {% for image in product.images %}
       {% if image.alt == value %}
@@ -65,10 +66,13 @@
       {% if option_disabled %}
       class="disabled"
       {% endif %}>
-    <label class="color-swatch" style="background-image: url('{{ p_img | image_url }}')" for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+    <label
+      class="color-swatch"
+      style="background-image: url('{{ p_img | image_url }}')"
+      for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
       <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
     </label>
-  {%- elsif block.settings.picker_type == 'button' -%}
+  {%- elsif option_name == "size" and block.settings.picker_type_2 == 'button' -%}
     <input
       type="radio"
       id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
@@ -85,7 +89,7 @@
       {{ value -}}
       <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
     </label>
-  {%- elsif block.settings.picker_type == 'dropdown' -%}
+  {%- elsif block.settings.picker_type_1 == 'dropdown' or block.settings.picker_type_2 == 'dropdown' -%}
     <option
       value="{{ value | escape }}"
       {% if option.selected_value == value %}
