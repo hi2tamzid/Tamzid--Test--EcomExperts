@@ -23,9 +23,9 @@
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
-            "picker_type": "button",
             "picker_type_1": "swatches",
-            "picker_type_2": "button"
+            "picker_type_2": "dropdown",
+            "picker_type_3": "button"
           }
         },
         "quantity_selector": {
