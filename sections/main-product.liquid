@@ -670,23 +670,6 @@
   </div>
 </section>
 
-<script>
-  // function to clear selected variants
-function clearSelectedVariants() {
-  // select all variant option of size 
-  let variant_selector = document.querySelectorAll(".js.product-form__input:nth-child(2) input");
-  
-  // loop through each select and set the selected value to the first option (which is usually the default)
-  variant_selector.forEach((item) => {
-    item.removeAttribute("checked");
-  });
-  // Marking first option as che
-  variant_selector[0].setAttribute("checked", "");
-} 
-window.addEventListener("load", clearSelectedVariants);
-
-</script>
-
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -820,26 +803,6 @@ window.addEventListener("load", clearSelectedVariants);
       "settings": [
         {
           "type": "select",
-          "id": "picker_type",
-          "options": [
-            {
-              "value": "dropdown",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_1.options__1.label"
-            },
-            {
-              "value": "button",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_1.options__2.label"
-            },
-            {
-              "value": "swatches",
-              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_1.options__3.label"
-            }
-          ],
-          "default": "button",
-          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_1.label"
-        },
-        {
-          "type": "select",
           "id": "picker_type_1",
           "options": [
             {
@@ -877,6 +840,26 @@ window.addEventListener("load", clearSelectedVariants);
           ],
           "default": "button",
           "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_2.label"
+        },
+        {
+          "type": "select",
+          "id": "picker_type_3",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_3.options__1.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_3.options__2.label"
+            },
+            {
+              "value": "swatches",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_3.options__3.label"
+            }
+          ],
+          "default": "button",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type_3.label"
         }
       ]
     },

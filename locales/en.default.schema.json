@@ -1995,6 +1995,18 @@
               "options__3": {
                 "label": "Swatches"
               }
+            },
+            "picker_type_3": {
+              "label": "Option 3",
+              "options__1": {
+                "label": "Dropdown"
+              },
+              "options__2": {
+                "label": "Pills"
+              },
+              "options__3": {
+                "label": "Swatches"
+              }
             }
           }
         },

@@ -1,18 +1,20 @@
-{% comment %} 
-      Renders product variant options
-     
-      Accepts: 
-      - product: {Object} product object. 
-      - option: {Object} current product_option object. 
-      - block: {Object} block object.
-     
-     
-      Usage:
-      {% render 'product-variant-options', 
-      product: product, 
-      option: option, 
-      block: block
-      %} 
+{% comment %}
+  Renders product variant options
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+  - picker_type: {String} type of picker to dispay
+
+
+  Usage:
+  {% render 'product-variant-options',
+    product: product,
+    option: option,
+    block: block
+    picker_type: picker_type
+  %}
 {% endcomment %}
 {%- liquid
   assign variants_available_arr = product.variants | map: 'available'
@@ -43,9 +45,27 @@
           endif
       endcase
     endfor
+
+    if option.position == 1
+      assign picker_type = block.settings.picker_type_1
+    elsif option.position == 2
+      assign picker_type = block.settings.picker_type_2
+    else 
+      assign picker_type = block.settings.picker_type_3
+    endif
   -%}
-  {% assign option_name = option.name | downcase  %}
-  {%- if option_name == "color" and  block.settings.picker_type_1 == 'swatches' -%}
+  {%- capture input_id -%}
+    {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+  {%- endcapture -%}
+
+  {%- capture label_unavailable %}
+    <span class="visually-hidden label-unavailable">
+      {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
+    </span>
+  {%- endcapture %}
+
+  {%- if picker_type == 'swatches' -%}
+
 
     {% for image in product.images %}
       {% if image.alt == value %}
@@ -54,47 +74,48 @@
       {% endif %}
     {% endfor %}
 
+
     <input
       type="radio"
-      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+      id="{{ input_id }}"
       name="{{ option.name }}"
       value="{{ value | escape }}"
       form="{{ product_form_id }}"
       {% if option.selected_value == value %}
-      checked
+        checked
       {% endif %}
       {% if option_disabled %}
-      class="disabled"
-      {% endif %}>
-    <label
-      class="color-swatch"
-      style="background-image: url('{{ p_img | image_url }}')"
-      for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
-      <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+        class="disabled"
+      {% endif %}
+    >
+    <label for="{{ input_id }}" class="color-swatch" style="background-image: url('{{ p_img | image_url }}')">
+      {{ label_unavailable }}
     </label>
-  {%- elsif option_name == "size" and block.settings.picker_type_2 == 'button' -%}
+  {%- elsif picker_type == 'button' -%}
     <input
       type="radio"
-      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+      id="{{ input_id }}"
       name="{{ option.name }}"
       value="{{ value | escape }}"
       form="{{ product_form_id }}"
       {% if option.selected_value == value %}
-      checked
+        checked
       {% endif %}
       {% if option_disabled %}
-      class="disabled"
-      {% endif %}>
-    <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+        class="disabled"
+      {% endif %}
+    >
+    <label for="{{ input_id }}">
       {{ value -}}
-      <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+      {{ label_unavailable }}
     </label>
-  {%- elsif block.settings.picker_type_1 == 'dropdown' or block.settings.picker_type_2 == 'dropdown' -%}
+  {%- elsif picker_type == 'dropdown' -%}
     <option
       value="{{ value | escape }}"
       {% if option.selected_value == value %}
-      selected="selected"
-      {% endif %}>
+        selected="selected"
+      {% endif %}
+    >
       {% if option_disabled -%}
         {{- 'products.product.value_unavailable' | t: option_value: value -}}
       {%- else -%}
