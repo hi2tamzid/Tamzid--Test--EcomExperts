@@ -5,6 +5,7 @@
   - product: {Object} product object.
   - option: {Object} current product_option object.
   - block: {Object} block object.
+  - picker_type: {String} type of picker to dispay
 
 
   Usage:
@@ -12,6 +13,7 @@
     product: product,
     option: option,
     block: block
+    picker_type: picker_type
   %}
 {% endcomment %}
 {%- liquid
@@ -43,12 +45,41 @@
           endif
       endcase
     endfor
-  -%}
 
-  {%- if block.settings.picker_type == 'button' -%}
+    if option.position == 1
+      assign picker_type = block.settings.picker_type_1
+    elsif option.position == 2
+      assign picker_type = block.settings.picker_type_2
+    else 
+      assign picker_type = block.settings.picker_type_3
+    endif
+  -%}
+  {%- capture input_id -%}
+    {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+  {%- endcapture -%}
+
+  {%- capture label_unavailable %}
+    <span class="visually-hidden label-unavailable">
+      {{- 'products.product.variant_sold_out_or_unavailable' | t -}}
+    </span>
+  {%- endcapture %}
+
+  {%- if picker_type == 'swatches' -%}
+
+    {% comment %} 
+      Finds the corresponding image of the variant
+     {% endcomment %}
+    {% for image in product.images %}
+      {% if image.alt == value %}
+        {% assign p_img = image %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+
     <input
       type="radio"
-      id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+      id="{{ input_id }}"
       name="{{ option.name }}"
       value="{{ value | escape }}"
       form="{{ product_form_id }}"
@@ -59,11 +90,28 @@
         class="disabled"
       {% endif %}
     >
-    <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
-      {{ value -}}
-      <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
+    <label for="{{ input_id }}" class="color-swatch" style="background-image: url('{{ p_img | image_url }}')">
+      {{ label_unavailable }}
     </label>
-  {%- elsif block.settings.picker_type == 'dropdown' -%}
+  {%- elsif picker_type == 'button' -%}
+    <input
+      type="radio"
+      id="{{ input_id }}"
+      name="{{ option.name }}"
+      value="{{ value | escape }}"
+      form="{{ product_form_id }}"
+      {% if option.selected_value == value %}
+        checked
+      {% endif %}
+      {% if option_disabled %}
+        class="disabled"
+      {% endif %}
+    >
+    <label for="{{ input_id }}">
+      {{ value -}}
+      {{ label_unavailable }}
+    </label>
+  {%- elsif picker_type == 'dropdown' -%}
     <option
       value="{{ value | escape }}"
       {% if option.selected_value == value %}
