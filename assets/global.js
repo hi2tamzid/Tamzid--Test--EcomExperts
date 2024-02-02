@@ -614,15 +614,20 @@ class VariantSelects extends HTMLElement {
   constructor() {
     super();
     this.addEventListener('change', this.onVariantChange);
+    this.first_image_hide = 0;
   }
 
   onVariantChange(event) {
-    const all_product_media = document.querySelectorAll(".product__media-item");
-    all_product_media.forEach((item) => {
-      if(!item.classList.contains("product__media-item--variant")){
-        item.classList.add("product__media-item--variant");
-      }
-    });
+    if(this.first_image_hide === 0){
+      const all_product_media = document.querySelectorAll(".product__media-item");
+      all_product_media.forEach((item) => {
+        if(!item.classList.contains("product__media-item--variant")){
+          item.classList.add("product__media-item--variant");
+        }
+      });
+      this.first_image_hide = 1;
+      console.log("First");
+    }
 
     this.updateOptions();
     this.updateMasterId();
@@ -718,12 +723,26 @@ class VariantSelects extends HTMLElement {
     });
   }
 
-  setInputAvailability(listOfOptions, listOfAvailableOptions) {
-    listOfOptions.forEach((input) => {
-      if (listOfAvailableOptions.includes(input.getAttribute('value'))) {
-        input.innerText = input.getAttribute('value');
-      } else {
-        input.innerText = window.variantStrings.unavailable_with_option.replace('[value]', input.getAttribute('value'));
+  // setInputAvailability(listOfOptions, listOfAvailableOptions) {
+  //   listOfOptions.forEach((input) => {
+  //     if (listOfAvailableOptions.includes(input.getAttribute('value'))) {
+  //       input.innerText = input.getAttribute('value');
+  //     } else {
+  //       input.innerText = window.variantStrings.unavailable_with_option.replace('[value]', input.getAttribute('value'));
+  //     }
+  //   });
+  // }
+  setInputAvailability(elementList, availableValuesList) {
+    elementList.forEach((element) => {
+      const value = element.getAttribute('value');
+      const availableElement = availableValuesList.includes(value);
+
+      if (element.tagName === 'INPUT') {
+        element.classList.toggle('disabled', !availableElement);
+      } else if (element.tagName === 'OPTION') {
+        element.innerText = availableElement
+          ? value
+          : window.variantStrings.unavailable_with_option.replace('[value]', value);
       }
     });
   }
