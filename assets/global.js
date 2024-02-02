@@ -613,29 +613,34 @@ customElements.define('deferred-media', DeferredMedia);
 class VariantSelects extends HTMLElement {
   constructor() {
     super();
-      window.onload = (event) => {
-        console.log("page is fully loaded");
-        let select_all = this.querySelector("select").selectedIndex = 0;
-        this.onVariantChange();
-      };
-      this.addEventListener('change', this.onVariantChange);
-      this.first_image_hide = 0;
+    this.first_image_hide = 0;
+    window.onload = (event) => {
+      // console.log("page is fully loaded");
+      let select_all = this.querySelector("select");
+      if(select_all){
+        select_all.selectedIndex = 0;
+      }
+      this.onVariantChange();
+    };
+    this.addEventListener('change', this.onVariantChange);
   }
 
   onVariantChange(event) {
-    if(this.first_image_hide < 2){
+    // Hide the images except the selected variant
+    if(this.first_image_hide === 1){
       const all_product_media = document.querySelectorAll(".product__media-item");
       all_product_media.forEach((item) => {
         if(!item.classList.contains("product__media-item--variant")){
           item.classList.add("product__media-item--variant");
         }
       });
-      if(this.first_image_hide == 0){
-        this.first_image_hide = 1;
-      }
-      else{
-        this.first_image_hide = 2;
-      }
+      console.log(this.first_image_hide);
+    }
+    if(this.first_image_hide === 0){
+      this.first_image_hide = 1;
+    }
+    else{
+      this.first_image_hide = 2;
     }
 
 
