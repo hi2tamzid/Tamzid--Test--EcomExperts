@@ -613,21 +613,31 @@ customElements.define('deferred-media', DeferredMedia);
 class VariantSelects extends HTMLElement {
   constructor() {
     super();
-    this.addEventListener('change', this.onVariantChange);
-    this.first_image_hide = 0;
+      window.onload = (event) => {
+        console.log("page is fully loaded");
+        let select_all = this.querySelector("select").selectedIndex = 0;
+        this.onVariantChange();
+      };
+      this.addEventListener('change', this.onVariantChange);
+      this.first_image_hide = 0;
   }
 
   onVariantChange(event) {
-    if(this.first_image_hide === 0){
+    if(this.first_image_hide < 2){
       const all_product_media = document.querySelectorAll(".product__media-item");
       all_product_media.forEach((item) => {
         if(!item.classList.contains("product__media-item--variant")){
           item.classList.add("product__media-item--variant");
         }
       });
-      this.first_image_hide = 1;
-      console.log("First");
+      if(this.first_image_hide == 0){
+        this.first_image_hide = 1;
+      }
+      else{
+        this.first_image_hide = 2;
+      }
     }
+
 
     this.updateOptions();
     this.updateMasterId();
